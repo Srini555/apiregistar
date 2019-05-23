@@ -21,6 +21,7 @@
 		<junit-version>4.11</junit-version>
 		<swagger-version>2.9.2</swagger-version>
 		<lombok-version>1.18.4</lombok-version>
+		<java-mail-version>1.6.2</java-mail-version>
 	</properties>
 
 	<dependencies>
@@ -82,6 +83,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${java-mail-version}</version>
 		</dependency>
 
 		<dependency>
