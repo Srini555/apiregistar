@@ -1,14 +1,14 @@
 package com.amisoft.apiregistry.model;
 
-
 import lombok.*;
+
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ClientRegistrationRequest {
+public class ClientRegistrationResponse {
 
     @NonNull
     private String clientApplicationName;
@@ -17,7 +17,11 @@ public class ClientRegistrationRequest {
     @NonNull
     private String clientApplicationOwnerEmail;
     @NonNull
-    private String applicationNameToRegister;
+    private String registrationKey;
+    @NonNull
+    private String message;
 
-
+    public ClientRegistrationResponse(@NonNull String message) {
+        this.message = message;
+    }
 }

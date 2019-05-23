@@ -1,15 +1,22 @@
-package com.amisoft.apiregistry.model;
+package com.amisoft.apiregistry.entity;
 
 
 import lombok.*;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="t_client")
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ClientRegistrationRequest {
+public class ClientRegistation {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     @NonNull
     private String clientApplicationName;
     @NonNull
@@ -17,7 +24,5 @@ public class ClientRegistrationRequest {
     @NonNull
     private String clientApplicationOwnerEmail;
     @NonNull
-    private String applicationNameToRegister;
-
-
+    private String registrationKey;
 }

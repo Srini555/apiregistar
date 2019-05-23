@@ -19,7 +19,7 @@ public class ApiRegistryResponse {
     @NonNull
     private String applicationApiUrl;
     @NonNull
-    String message;
+    private String message;
 
 
     public ApiRegistryResponse(@NonNull String message) {

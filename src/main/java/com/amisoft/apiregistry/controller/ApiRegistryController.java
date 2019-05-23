@@ -34,7 +34,7 @@ public class ApiRegistryController {
             if (apiRegistryResponse.isPresent())
                 return new ResponseEntity<>(apiRegistryResponse.get(), HttpStatus.OK);
             else
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(new ApiRegistryResponse("Invalid email address"),HttpStatus.BAD_REQUEST);
@@ -49,7 +49,7 @@ public class ApiRegistryController {
         if(apiRegistryResponses.isPresent())
             return new ResponseEntity<>(apiRegistryResponses.get(),HttpStatus.OK);
         else
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/findApiByName")
@@ -59,7 +59,7 @@ public class ApiRegistryController {
         if(apiRegistryResponse.isPresent())
             return new ResponseEntity<>(apiRegistryResponse.get(),HttpStatus.OK);
         else
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
