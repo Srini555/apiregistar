@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApplicationApiRepository extends JpaRepository<ApplicationApi,Long> {
+
+    public ApplicationApi findByApplicationName(String name);
 }

@@ -49,6 +49,24 @@ public class ApplicationRegistrationService {
     }
 
 
+    public Optional<ApiRegistryResponse> findApiByName(String name){
+
+        log.info("Searching application for name :"+name);
+        ApplicationApi applicationApi =  applicationApiRepository.findByApplicationName(name);
+
+        if(null != applicationApi){
+
+            log.info("Application found by name :"+name);
+            ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
+            BeanUtils.copyProperties(applicationApi,apiRegistryResponse);
+            return Optional.of(apiRegistryResponse);
+        }
+
+        log.info("No application is registered by name :"+name);
+        return Optional.empty();
+    }
+
+
     private ApiRegistryResponse convertToresponse(ApplicationApi applicationApi){
 
         ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();

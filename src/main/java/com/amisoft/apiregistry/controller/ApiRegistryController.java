@@ -43,5 +43,15 @@ public class ApiRegistryController {
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/findApiByName")
+    public ResponseEntity<ApiRegistryResponse> findApiByName(@RequestParam String name){
+
+        Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.findApiByName(name);
+        if(apiRegistryResponse.isPresent())
+            return new ResponseEntity<>(apiRegistryResponse.get(),HttpStatus.OK);
+        else
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+    }
+
 
 }
