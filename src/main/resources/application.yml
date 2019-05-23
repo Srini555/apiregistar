@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: apiregistar
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/registar
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8001
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      expose: "*"
