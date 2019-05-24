@@ -1,12 +1,15 @@
 package com.amisoft.apiregistry.service;
 
 
+import com.amisoft.apiregistry.config.ApiCreateEventConfig;
 import com.amisoft.apiregistry.entity.ClientRegistation;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
 import com.amisoft.apiregistry.model.ClientRegistrationRequest;
 import com.amisoft.apiregistry.model.ClientRegistrationResponse;
+import com.amisoft.apiregistry.model.EventApiClientRegistration;
 import com.amisoft.apiregistry.repository.ClientRegistrationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.amisoft.apiregistry.constant.ApiRegistryConstant.EXCHANGE_NAME;
+import static com.amisoft.apiregistry.constant.ApiRegistryConstant.ROUTING_KEY;
 
 @Service
 @Slf4j
@@ -27,6 +33,9 @@ public class ApiClientRegistrationService {
 
     @Autowired
     ApplicationRegistrationService applicationRegistrationService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public Optional<ClientRegistrationResponse> registerClient(ClientRegistrationRequest clientRegistrationRequest){
 
@@ -58,6 +67,9 @@ public class ApiClientRegistrationService {
 
                 ClientRegistrationResponse clientRegistrationResponse = new ClientRegistrationResponse();
                 BeanUtils.copyProperties(clientRegistation, clientRegistrationResponse);
+
+                rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,new EventApiClientRegistration("client_registered"
+                        ,clientRegistrationRequest.getApplicationNameToRegister()));
 
                 return Optional.of(clientRegistrationResponse);
             }else{
