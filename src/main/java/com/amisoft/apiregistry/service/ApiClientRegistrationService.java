@@ -1,8 +1,6 @@
 package com.amisoft.apiregistry.service;
 
 
-import antlr.StringUtils;
-import com.amisoft.apiregistry.entity.ApplicationApi;
 import com.amisoft.apiregistry.entity.ClientRegistation;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
 import com.amisoft.apiregistry.model.ClientRegistrationRequest;
@@ -13,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -79,6 +76,21 @@ public class ApiClientRegistrationService {
         return Optional.of(clientRegistrationResponseList);
     }
 
+
+
+    public Optional <List<ClientRegistrationResponse>> findRegisteredClientForAPI(String name){
+
+        log.info("Searching clients for application  :"+name);
+
+        List<ClientRegistation> clientRegistationList =  clientRegistrationRepository.findByClientApplicationName(name);
+
+        log.info("Total number of registered client for applicaation "+name +" is :"+clientRegistationList.size());
+        List<ClientRegistrationResponse> clientRegistrationResponseList  = clientRegistationList.stream()
+                .map(api -> convertToresponse(api)).collect(Collectors.toList());
+
+        log.info("Converted to response:"+name);
+        return Optional.of(clientRegistrationResponseList);
+    }
 
     private ClientRegistrationResponse convertToresponse(ClientRegistation clientRegistation){
 
