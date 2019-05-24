@@ -22,7 +22,7 @@ public class ApiRegistryController {
     ApplicationRegistrationService applicationRegistrationService;
 
 
-    @PostMapping(path = "/registernewapi")
+    @PostMapping(path = "/registerNewApi")
     public ResponseEntity<ApiRegistryResponse> registerApi(@RequestBody ApiRegistryRequest apiRegistryRequest) {
 
 
