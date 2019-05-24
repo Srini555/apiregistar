@@ -63,7 +63,7 @@ public class ApplicationRegistrationService {
         log.info("Searching application for name :"+name);
         ApplicationApi applicationApi =  applicationApiRepository.findByApplicationName(name);
 
-        if(null != applicationApi){
+        if(null != applicationApi && applicationApi.getIsActive()){
 
             log.info("Application found by name :"+name);
             ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
