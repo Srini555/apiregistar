@@ -25,4 +25,6 @@ public class ApplicationApi {
     private String applicationOwnerEmail;
     @NonNull
     private String applicationApiUrl;
+    @NonNull
+    private Boolean isActive;
 }

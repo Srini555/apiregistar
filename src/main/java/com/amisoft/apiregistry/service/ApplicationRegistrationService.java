@@ -33,6 +33,7 @@ public class ApplicationRegistrationService {
 
             ApplicationApi applicationApi = new ApplicationApi();
             BeanUtils.copyProperties(apiRegistryRequest, applicationApi);
+            applicationApi.setIsActive(Boolean.TRUE);
             log.info("Saving application :" + applicationApi.getApplicationName());
             ApplicationApi applicationApiSaved = applicationApiRepository.save(applicationApi);
             log.info("Saved application :" + applicationApiSaved.getApplicationName());
@@ -94,6 +95,22 @@ public class ApplicationRegistrationService {
             return Optional.empty();
         }
 
+    }
+
+    public void deleteApiRegistration(ApiRegistryRequest apiRegistryRequest){
+
+        ApplicationApi applicationApi = applicationApiRepository.findByApplicationName(apiRegistryRequest.getApplicationName());
+        ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
+
+        if(null != applicationApi){
+
+            log.info("Registered application :"+apiRegistryRequest.getApplicationName());
+            BeanUtils.copyProperties(apiRegistryRequest,applicationApi);
+            applicationApi.setIsActive(Boolean.FALSE);
+            applicationApiRepository.save(applicationApi);
+            log.info("Registered application deleted :"+apiRegistryRequest.getApplicationName());
+
+        }
     }
 
     private ApiRegistryResponse convertToresponse(ApplicationApi applicationApi){

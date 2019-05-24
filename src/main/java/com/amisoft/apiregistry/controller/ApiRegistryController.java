@@ -65,7 +65,6 @@ public class ApiRegistryController {
     @PutMapping(path = "/updateRegisteredApi")
     public ResponseEntity<ApiRegistryResponse> updateApi(@RequestBody ApiRegistryRequest apiRegistryRequest) {
 
-
         if (ApplicationValidator.isValidEmailAddress(apiRegistryRequest.getApplicationOwnerEmail())) {
 
             Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.
@@ -73,10 +72,15 @@ public class ApiRegistryController {
 
             return apiRegistryResponse.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
                     .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
-
         }
-
         return new ResponseEntity<>(new ApiRegistryResponse("Invalid email address"),HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(path = "/deleteRegisteredApi")
+    public ResponseEntity<ApiRegistryResponse> deleteApi(@RequestBody ApiRegistryRequest apiRegistryRequest) {
+
+        applicationRegistrationService.deleteApiRegistration(apiRegistryRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
