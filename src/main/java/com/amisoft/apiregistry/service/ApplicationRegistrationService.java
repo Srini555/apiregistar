@@ -24,14 +24,23 @@ public class ApplicationRegistrationService {
     public Optional<ApiRegistryResponse> registerApplicationApi(ApiRegistryRequest apiRegistryRequest){
 
         ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
-        ApplicationApi applicationApi = new ApplicationApi();
-        BeanUtils.copyProperties(apiRegistryRequest,applicationApi);
-        log.info("Saving application :"+applicationApi.getApplicationName());
-        ApplicationApi applicationApiSaved = applicationApiRepository.save(applicationApi);
-        log.info("Saved application :"+applicationApiSaved.getApplicationName());
 
-        BeanUtils.copyProperties(applicationApiSaved,apiRegistryResponse);
-        apiRegistryResponse.setMessage("Application saved successfully");
+        if(findApiByName(apiRegistryRequest.getApplicationName()).isPresent()){
+
+            log.info("Application has already been registered :"+apiRegistryRequest.getApplicationName());
+            apiRegistryResponse.setMessage("Application already registered");
+        }
+        else {
+
+            ApplicationApi applicationApi = new ApplicationApi();
+            BeanUtils.copyProperties(apiRegistryRequest, applicationApi);
+            log.info("Saving application :" + applicationApi.getApplicationName());
+            ApplicationApi applicationApiSaved = applicationApiRepository.save(applicationApi);
+            log.info("Saved application :" + applicationApiSaved.getApplicationName());
+
+            BeanUtils.copyProperties(applicationApiSaved, apiRegistryResponse);
+            apiRegistryResponse.setMessage("Application saved successfully");
+        }
 
         return Optional.of(apiRegistryResponse);
     }
