@@ -50,7 +50,8 @@ public class ApplicationRegistrationService {
         List<ApplicationApi> registeredApiList =  applicationApiRepository.findAll();
 
         log.info("Total number of api found :"+registeredApiList.size());
-        List<ApiRegistryResponse> applicationApiResponseList  = registeredApiList.stream().map(api -> convertToresponse(api)).collect(Collectors.toList());
+        List<ApiRegistryResponse> applicationApiResponseList  = registeredApiList.stream().filter(api->api.getIsActive())
+                .map(api -> convertToresponse(api)).collect(Collectors.toList());
         log.info("Converted to response");
 
         return Optional.of(applicationApiResponseList);

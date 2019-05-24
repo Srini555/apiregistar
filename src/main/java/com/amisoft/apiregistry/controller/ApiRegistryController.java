@@ -31,7 +31,7 @@ public class ApiRegistryController {
             Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.
                     registerApplicationApi(apiRegistryRequest);
 
-            return apiRegistryResponse.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
+            return apiRegistryResponse.map(apiRegistryRes -> new ResponseEntity<>(apiRegistryRes,HttpStatus.OK))
                     .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
         }
@@ -46,8 +46,10 @@ public class ApiRegistryController {
 
         Optional<List<ApiRegistryResponse>> apiRegistryResponses = applicationRegistrationService.findAllRegisteredApi();
 
-        return apiRegistryResponses.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
-                .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if(apiRegistryResponses.isPresent())
+            return new ResponseEntity<>(apiRegistryResponses.get(),HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
