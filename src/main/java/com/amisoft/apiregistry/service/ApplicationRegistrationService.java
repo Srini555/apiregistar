@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,6 +73,28 @@ public class ApplicationRegistrationService {
         return Optional.empty();
     }
 
+
+    public Optional<ApiRegistryResponse> updateApiRegistration(ApiRegistryRequest apiRegistryRequest){
+
+        ApplicationApi applicationApi = applicationApiRepository.findByApplicationName(apiRegistryRequest.getApplicationName());
+        ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
+
+        if(null != applicationApi){
+
+            log.info("Registered application :"+apiRegistryRequest.getApplicationName());
+            BeanUtils.copyProperties(apiRegistryRequest,applicationApi);
+            applicationApiRepository.save(applicationApi);
+            log.info("Registered application updated :"+apiRegistryRequest.getApplicationName());
+
+            BeanUtils.copyProperties(applicationApi,apiRegistryResponse);
+
+            return Optional.of(apiRegistryResponse);
+
+        }else{
+            return Optional.empty();
+        }
+
+    }
 
     private ApiRegistryResponse convertToresponse(ApplicationApi applicationApi){
 

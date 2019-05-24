@@ -23,7 +23,7 @@ public class ApiRegistryController {
 
 
     @PostMapping(path = "/registernewapi")
-    public ResponseEntity<ApiRegistryResponse> createNewConsumerAccount(@RequestBody ApiRegistryRequest apiRegistryRequest) {
+    public ResponseEntity<ApiRegistryResponse> registerApi(@RequestBody ApiRegistryRequest apiRegistryRequest) {
 
 
         if (ApplicationValidator.isValidEmailAddress(apiRegistryRequest.getApplicationOwnerEmail())) {
@@ -31,10 +31,9 @@ public class ApiRegistryController {
             Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.
                     registerApplicationApi(apiRegistryRequest);
 
-            if (apiRegistryResponse.isPresent())
-                return new ResponseEntity<>(apiRegistryResponse.get(), HttpStatus.OK);
-            else
-                return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return apiRegistryResponse.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
+                    .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
         }
 
         return new ResponseEntity<>(new ApiRegistryResponse("Invalid email address"),HttpStatus.BAD_REQUEST);
@@ -46,23 +45,40 @@ public class ApiRegistryController {
     public ResponseEntity<List<ApiRegistryResponse>> findAllRegisteredApi(){
 
         Optional<List<ApiRegistryResponse>> apiRegistryResponses = applicationRegistrationService.findAllRegisteredApi();
-        if(apiRegistryResponses.isPresent())
-            return new ResponseEntity<>(apiRegistryResponses.get(),HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return apiRegistryResponses.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
+                .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 
     @GetMapping("/findApiByName")
     public ResponseEntity<ApiRegistryResponse> findApiByName(@RequestParam String name){
 
         Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.findApiByName(name);
-        if(apiRegistryResponse.isPresent())
-            return new ResponseEntity<>(apiRegistryResponse.get(),HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return apiRegistryResponse.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
+                .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 
 
+    @PutMapping(path = "/updateRegisteredApi")
+    public ResponseEntity<ApiRegistryResponse> updateApi(@RequestBody ApiRegistryRequest apiRegistryRequest) {
+
+
+        if (ApplicationValidator.isValidEmailAddress(apiRegistryRequest.getApplicationOwnerEmail())) {
+
+            Optional<ApiRegistryResponse> apiRegistryResponse = applicationRegistrationService.
+                    updateApiRegistration(apiRegistryRequest);
+
+            return apiRegistryResponse.map(apiRegistry -> new ResponseEntity<>(apiRegistry,HttpStatus.OK))
+                    .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+        }
+
+        return new ResponseEntity<>(new ApiRegistryResponse("Invalid email address"),HttpStatus.BAD_REQUEST);
+
+    }
 
 
 
