@@ -38,8 +38,7 @@ public class ApplicationRegistrationService {
 
     public Optional<List<ApiRegistryResponse>> findAllRegisteredApi(){
 
-        List<ApplicationApi> registeredApiList = new ArrayList<>();
-        registeredApiList =  applicationApiRepository.findAll();
+        List<ApplicationApi> registeredApiList =  applicationApiRepository.findAll();
 
         log.info("Total number of api found :"+registeredApiList.size());
         List<ApiRegistryResponse> applicationApiResponseList  = registeredApiList.stream().map(api -> convertToresponse(api)).collect(Collectors.toList());
