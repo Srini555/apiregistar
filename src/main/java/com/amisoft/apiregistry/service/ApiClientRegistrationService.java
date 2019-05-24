@@ -35,6 +35,8 @@ public class ApiClientRegistrationService {
 
         if(apiRegistryResponse.isPresent()){
 
+            log.info("Application found for name :"+clientRegistrationRequest.getApplicationNameToRegister());
+
             ClientRegistation clientRegistation = new ClientRegistation();
             BeanUtils.copyProperties(clientRegistrationRequest,clientRegistation);
             clientRegistation.setRegistrationKey(UUID.randomUUID().toString().replace(UNDER_SCORE, EMPTY));
@@ -82,7 +84,7 @@ public class ApiClientRegistrationService {
 
         log.info("Searching clients for application  :"+name);
 
-        List<ClientRegistation> clientRegistationList =  clientRegistrationRepository.findByClientApplicationName(name);
+        List<ClientRegistation> clientRegistationList =  clientRegistrationRepository.findByApplicationNameToRegister(name);
 
         log.info("Total number of registered client for applicaation "+name +" is :"+clientRegistationList.size());
         List<ClientRegistrationResponse> clientRegistrationResponseList  = clientRegistationList.stream()

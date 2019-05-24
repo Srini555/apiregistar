@@ -24,5 +24,7 @@ public class ClientRegistation {
     @NonNull
     private String clientApplicationOwnerEmail;
     @NonNull
+    private String applicationNameToRegister;
+    @NonNull
     private String registrationKey;
 }

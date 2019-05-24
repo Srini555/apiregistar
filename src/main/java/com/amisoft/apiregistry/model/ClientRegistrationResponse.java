@@ -19,6 +19,8 @@ public class ClientRegistrationResponse {
     @NonNull
     private String registrationKey;
     @NonNull
+    private String applicationNameToRegister;
+    @NonNull
     private String message;
 
     public ClientRegistrationResponse(@NonNull String message) {

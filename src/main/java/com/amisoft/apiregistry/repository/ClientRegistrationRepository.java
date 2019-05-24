@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface ClientRegistrationRepository extends JpaRepository<ClientRegistation,Long> {
 
-    public List<ClientRegistation> findByClientApplicationName(String name);
+    public List<ClientRegistation> findByApplicationNameToRegister(String name);
 
 }
