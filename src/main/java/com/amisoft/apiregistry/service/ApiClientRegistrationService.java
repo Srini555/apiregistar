@@ -35,25 +35,37 @@ public class ApiClientRegistrationService {
 
         if(apiRegistryResponse.isPresent()){
 
-            log.info("Application found for name :"+clientRegistrationRequest.getApplicationNameToRegister());
+            ClientRegistation clientRegistation = clientRegistrationRepository
+                    .findByClientApplicationNameAndApplicationNameToRegister(clientRegistrationRequest.getClientApplicationName(),
+                            clientRegistrationRequest.getApplicationNameToRegister());
 
-            ClientRegistation clientRegistation = new ClientRegistation();
-            BeanUtils.copyProperties(clientRegistrationRequest,clientRegistation);
-            clientRegistation.setRegistrationKey(UUID.randomUUID().toString().replace(UNDER_SCORE, EMPTY));
+            if(null == clientRegistation) {
 
-            log.info("Registering client "+clientRegistrationRequest.getClientApplicationName()+
-                    " for application :"+clientRegistrationRequest.getApplicationNameToRegister());
+                log.info("Application found for name :" + clientRegistrationRequest.getApplicationNameToRegister());
 
-            ClientRegistation clientRegistrationSaved = clientRegistrationRepository.save(clientRegistation);
+                clientRegistation = new ClientRegistation();
+                BeanUtils.copyProperties(clientRegistrationRequest, clientRegistation);
+                clientRegistation.setRegistrationKey(UUID.randomUUID().toString().replace(UNDER_SCORE, EMPTY));
+
+                log.info("Registering client " + clientRegistrationRequest.getClientApplicationName() +
+                        " for application :" + clientRegistrationRequest.getApplicationNameToRegister());
+
+                ClientRegistation clientRegistrationSaved = clientRegistrationRepository.save(clientRegistation);
 
 
-            log.info("Registered client "+clientRegistrationRequest.getClientApplicationName()+
-                    " for application :"+clientRegistrationRequest.getApplicationNameToRegister());
+                log.info("Registered client " + clientRegistrationRequest.getClientApplicationName() +
+                        " for application :" + clientRegistrationRequest.getApplicationNameToRegister());
 
-            ClientRegistrationResponse clientRegistrationResponse = new ClientRegistrationResponse();
-            BeanUtils.copyProperties(clientRegistation,clientRegistrationResponse);
+                ClientRegistrationResponse clientRegistrationResponse = new ClientRegistrationResponse();
+                BeanUtils.copyProperties(clientRegistation, clientRegistrationResponse);
 
-            return Optional.of(clientRegistrationResponse);
+                return Optional.of(clientRegistrationResponse);
+            }else{
+
+                log.error("Client is already registered for the application ");
+                return Optional.empty();
+
+            }
 
 
         }else{

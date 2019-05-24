@@ -11,4 +11,6 @@ public interface ClientRegistrationRepository extends JpaRepository<ClientRegist
 
     public List<ClientRegistation> findByApplicationNameToRegister(String name);
 
+    public ClientRegistation findByClientApplicationNameAndApplicationNameToRegister(String client, String api);
+
 }
