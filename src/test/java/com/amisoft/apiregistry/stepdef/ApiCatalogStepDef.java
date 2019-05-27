@@ -80,4 +80,36 @@ public class ApiCatalogStepDef {
             count++;
         });
     }
+
+
+    @Given("^John wants to use xTron registered api and searching for registered api$")
+    public void john_wants_to_use_xTron_registered_api() throws Throwable {
+
+        actualApiCatalogResponseList.addAll(applicationRegistrationService.findAllRegisteredApi().get());
+    }
+
+    @Given("^John is searching for api as$")
+    public void john_is_searching_for_api_as(List<String> aliNameList) throws Throwable {
+
+        aliNameList.forEach(apiName -> {
+
+            actualApiCatalogResponseList.add(applicationRegistrationService.findApiByName(apiName).get());
+        });
+    }
+
+    @Then("^John should get registered Api as$")
+    public void john_should_get_registered_Api_as(List<String> responseDtoExpectedList) throws Throwable {
+
+        actualApiCatalogResponseList.forEach(apiRegistryResponse -> {
+
+            String  apiRegistryExpected = responseDtoExpectedList.get(count);
+            List<String> splittedResponse = Arrays.asList(apiRegistryExpected.split(","));
+
+            assertThat(apiRegistryResponse.getApplicationName(), is(splittedResponse.get(0)));
+            assertThat(apiRegistryResponse.getApplicationOwner(), is(splittedResponse.get(1)));
+            assertThat(apiRegistryResponse.getApplicationOwnerEmail(), is(splittedResponse.get(2)));
+            assertThat(apiRegistryResponse.getApplicationApiUrl(), is(splittedResponse.get(3)));
+            count++;
+        });
+    }
 }

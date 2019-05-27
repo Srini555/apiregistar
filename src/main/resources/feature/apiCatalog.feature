@@ -23,3 +23,21 @@ Feature: API catalog
 	Then Api should not be registered
 	  | Application registered successfully |
 	  | Application already registered      |
+
+
+  Scenario: Search for registered api
+
+	Given John wants to use xTron registered api and searching for registered api
+	Then John should get registered Api as
+	  | restaurant_account,PCFCOE,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html |
+	  | restaurant_order,PCFCOE,amit.datta2@wipro.com,http://localhost:8003/swagger-ui.html   |
+	  | duplicate_api,PCFCOE,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html      |
+
+  Scenario: Search for registered api by API name
+
+	Given John is searching for api as
+	  | restaurant_account |
+	Then John should get registered Api as
+	  | restaurant_account,PCFCOE,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html |
+
+
