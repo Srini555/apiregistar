@@ -39,7 +39,7 @@ public class ApplicationRegistrationService {
             log.info("Saved application :" + applicationApiSaved.getApplicationName());
 
             BeanUtils.copyProperties(applicationApiSaved, apiRegistryResponse);
-            apiRegistryResponse.setMessage("Application saved successfully");
+            apiRegistryResponse.setMessage("Application registered successfully");
         }
 
         return Optional.of(apiRegistryResponse);

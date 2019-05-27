@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: apiregistar
+
+  datasource:
+    url: jdbc:h2:mem:digitest
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: amit
+    password: amit
+
+server:
+  port: 8001
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      expose: "*"
