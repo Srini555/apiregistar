@@ -13,3 +13,13 @@ Feature: API catalog
 	  | restaurant_account,PCFCOE,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html,Application registered successfully |
 	  | restaurant_order,PCFCOE,amit.datta2@wipro.com,http://localhost:8003/swagger-ui.html,Application registered successfully   |
 
+  Scenario: Registering an already registered  Api
+
+	Given xTron restaurant team already registered restaurant_account and trying to register again
+	  | Application Name | Application Owner | Application Owner Email | Application Api Url                   |
+	  | duplicate_api    | PCFCOE            | amit.datta2@wipro.com   | http://localhost:8002/swagger-ui.html |
+	  | duplicate_api    | PCFCOE            | amit.datta2@wipro.com   | http://localhost:8002/swagger-ui.html |
+
+	Then Api should not be registered
+	  | Application registered successfully |
+	  | Application already registered      |

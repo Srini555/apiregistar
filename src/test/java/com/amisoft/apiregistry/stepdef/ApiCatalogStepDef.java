@@ -4,6 +4,7 @@ package com.amisoft.apiregistry.stepdef;
 import com.amisoft.apiregistry.model.ApiRegistryRequest;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
 import com.amisoft.apiregistry.service.ApplicationRegistrationService;
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,27 @@ public class ApiCatalogStepDef {
             count++;
         });
 
+    }
+
+
+    @Given("^xTron restaurant team already registered restaurant_account and trying to register again$")
+    public void xtron_restaurant_team_already_registered_restaurant_account_and_trying_to_register_again(List<ApiRegistryRequest> requestTestDtoList)
+            throws Throwable {
+
+        requestTestDtoList.forEach(requestTestDto -> {
+
+            actualApiCatalogResponseList.add(applicationRegistrationService.registerApplicationApi(requestTestDto).get());
+        });
+    }
+
+    @Then("^Api should not be registered$")
+    public void api_should_not_be_registered(List<String> responseDtoExpectedList) throws Throwable {
+
+        actualApiCatalogResponseList.forEach(apiRegistryResponse -> {
+
+            String  apiRegistryExpected = responseDtoExpectedList.get(count);
+            assertThat(apiRegistryResponse.getMessage(), is(apiRegistryExpected));
+            count++;
+        });
     }
 }
