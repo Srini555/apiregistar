@@ -7,3 +7,17 @@ Feature: API Subscription
 	  | restaurant_order        | PCFCOE                   | pcf_coe_api                  | amit.datta2@wipro.com          |
 	Then Client application should be able to subscribe the api
 	  | restaurant_order,PCFCOE,pcf_coe_api,amit.datta2@wipro.com |
+
+  Scenario: Search for all registered client
+
+	Given John wants to search for all registered client
+	Then He should get
+	  | restaurant_order,PCFCOE,pcf_coe_api,amit.datta2@wipro.com |
+
+
+  Scenario: Search for all registered client of an api
+
+	Given John wants to search for all registered client for api as
+	  | pcf_coe_api |
+	Then He should get
+	  | restaurant_order,PCFCOE,pcf_coe_api,amit.datta2@wipro.com |

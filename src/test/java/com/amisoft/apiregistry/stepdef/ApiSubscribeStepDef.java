@@ -70,4 +70,37 @@ public class ApiSubscribeStepDef {
             count++;
         });
     }
+
+
+    @Given("^John wants to search for all registered client$")
+    public void john_wants_to_search_for_all_registered_client() throws Throwable {
+
+        actualResponseList.addAll(apiClientRegistrationService.findAllRegisteredClient().get());
+    }
+
+    @Given("^John wants to search for all registered client for api as$")
+    public void john_wants_to_search_for_all_registered_client_for_api_as(List<String> apiNameList) throws Throwable {
+
+        apiNameList.forEach(apiName->{
+            actualResponseList.addAll(apiClientRegistrationService.findRegisteredClientForAPI(apiName).get());
+        });
+
+    }
+
+    @Then("^He should get$")
+    public void he_should_get(List<String> responseExpectedList) throws Throwable {
+
+        actualResponseList.forEach(apiRegistryResponse -> {
+
+            String  apiRegistryExpected = responseExpectedList.get(count);
+            List<String> splittedResponse = Arrays.asList(apiRegistryExpected.split(","));
+
+            assertThat(apiRegistryResponse.getClientApplicationName(), is(splittedResponse.get(0)));
+            assertThat(apiRegistryResponse.getClientApplicationOwner(), is(splittedResponse.get(1)));
+            assertThat(apiRegistryResponse.getApplicationNameToRegister(), is(splittedResponse.get(2)));
+            assertThat(apiRegistryResponse.getClientApplicationOwnerEmail(), is(splittedResponse.get(3)));
+            assertNotNull(apiRegistryResponse.getRegistrationKey());
+            count++;
+        });
+    }
 }
