@@ -89,6 +89,7 @@ public class ApplicationRegistrationService {
             log.info("Registered application updated :"+apiRegistryRequest.getApplicationName());
 
             BeanUtils.copyProperties(applicationApi,apiRegistryResponse);
+            apiRegistryResponse.setMessage("Application has been updated successfully");
 
             return Optional.of(apiRegistryResponse);
 

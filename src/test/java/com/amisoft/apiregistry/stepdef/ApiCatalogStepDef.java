@@ -4,7 +4,6 @@ package com.amisoft.apiregistry.stepdef;
 import com.amisoft.apiregistry.model.ApiRegistryRequest;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
 import com.amisoft.apiregistry.service.ApplicationRegistrationService;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +99,31 @@ public class ApiCatalogStepDef {
     @Then("^John should get registered Api as$")
     public void john_should_get_registered_Api_as(List<String> responseDtoExpectedList) throws Throwable {
 
+        actualApiCatalogResponseList.forEach(apiRegistryResponse -> {
+
+            String  apiRegistryExpected = responseDtoExpectedList.get(count);
+            List<String> splittedResponse = Arrays.asList(apiRegistryExpected.split(","));
+
+            assertThat(apiRegistryResponse.getApplicationName(), is(splittedResponse.get(0)));
+            assertThat(apiRegistryResponse.getApplicationOwner(), is(splittedResponse.get(1)));
+            assertThat(apiRegistryResponse.getApplicationOwnerEmail(), is(splittedResponse.get(2)));
+            assertThat(apiRegistryResponse.getApplicationApiUrl(), is(splittedResponse.get(3)));
+            count++;
+        });
+    }
+
+
+    @Given("^xTron team wants to update api as$")
+    public void xtron_team_wants_to_update_api_as(List<ApiRegistryRequest> requestTestDtoList) throws Throwable {
+
+        requestTestDtoList.forEach(requestTestDto -> {
+
+            actualApiCatalogResponseList.add(applicationRegistrationService.updateApiRegistration(requestTestDto).get());
+        });
+    }
+
+    @Then("^API should be updated as$")
+    public void api_should_be_updated_as(List<String> responseDtoExpectedList) throws Throwable {
         actualApiCatalogResponseList.forEach(apiRegistryResponse -> {
 
             String  apiRegistryExpected = responseDtoExpectedList.get(count);

@@ -41,3 +41,10 @@ Feature: API catalog
 	  | restaurant_account,PCFCOE,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html |
 
 
+  Scenario: Update already registered API
+
+	Given xTron team wants to update api as
+	  | Application Name   | Application Owner | Application Owner Email | Application Api Url                   |
+	  | restaurant_account | PCFCOE_LAB        | amit.datta2@wipro.com   | http://localhost:8002/swagger-ui.html |
+	Then API should be updated as
+	  | restaurant_account,PCFCOE_LAB,amit.datta2@wipro.com,http://localhost:8002/swagger-ui.html,Application has been updated successfully |
