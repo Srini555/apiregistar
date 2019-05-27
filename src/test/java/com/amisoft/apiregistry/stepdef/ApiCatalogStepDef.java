@@ -3,6 +3,7 @@ package com.amisoft.apiregistry.stepdef;
 
 import com.amisoft.apiregistry.model.ApiRegistryRequest;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
+import com.amisoft.apiregistry.model.ApiRegistryResponseDelete;
 import com.amisoft.apiregistry.service.ApplicationRegistrationService;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -27,6 +28,7 @@ public class ApiCatalogStepDef {
     @Autowired
     ApplicationRegistrationService applicationRegistrationService;
     private List<ApiRegistryResponse> actualApiCatalogResponseList = new ArrayList();
+    private List<ApiRegistryResponseDelete> actualApiCatalogResponseDeleteList = new ArrayList();
     private int count = 0;
 
     @Given("^xTron restaurant team given the information to register their api as$")
@@ -136,4 +138,34 @@ public class ApiCatalogStepDef {
             count++;
         });
     }
+
+
+    @Given("^xTron team wants to delete api as$")
+    public void xtron_team_wants_to_delete_api_as(List<ApiRegistryRequest> requestTestDtoList) throws Throwable {
+
+        requestTestDtoList.forEach(requestTestDto -> {
+
+            actualApiCatalogResponseDeleteList.add(applicationRegistrationService.deleteApiRegistration(requestTestDto).get());
+        });
+    }
+
+    @Then("^API should be set inactive  as$")
+    public void api_should_be_set_inactive_as(List<String> responseDtoExpectedList) throws Throwable {
+
+        actualApiCatalogResponseDeleteList.forEach(apiRegistryResponse -> {
+
+            String  apiRegistryExpected = responseDtoExpectedList.get(count);
+            List<String> splittedResponse = Arrays.asList(apiRegistryExpected.split(","));
+
+            assertThat(apiRegistryResponse.getApplicationName(), is(splittedResponse.get(0)));
+            assertThat(apiRegistryResponse.getApplicationOwner(), is(splittedResponse.get(1)));
+            assertThat(apiRegistryResponse.getApplicationOwnerEmail(), is(splittedResponse.get(2)));
+            assertThat(apiRegistryResponse.getApplicationApiUrl(), is(splittedResponse.get(3)));
+            assertThat(apiRegistryResponse.getMessage(),is(splittedResponse.get(4)));
+            assertThat(apiRegistryResponse.getIsActive(),is(Boolean.valueOf(splittedResponse.get(5))));
+
+            count++;
+        });
+    }
+
 }

@@ -3,6 +3,7 @@ package com.amisoft.apiregistry.service;
 import com.amisoft.apiregistry.entity.ApplicationApi;
 import com.amisoft.apiregistry.model.ApiRegistryRequest;
 import com.amisoft.apiregistry.model.ApiRegistryResponse;
+import com.amisoft.apiregistry.model.ApiRegistryResponseDelete;
 import com.amisoft.apiregistry.repository.ApplicationApiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -99,20 +100,27 @@ public class ApplicationRegistrationService {
 
     }
 
-    public void deleteApiRegistration(ApiRegistryRequest apiRegistryRequest){
+    public Optional<ApiRegistryResponseDelete> deleteApiRegistration(ApiRegistryRequest apiRegistryRequest){
 
         ApplicationApi applicationApi = applicationApiRepository.findByApplicationName(apiRegistryRequest.getApplicationName());
-        ApiRegistryResponse apiRegistryResponse = new ApiRegistryResponse();
+        ApiRegistryResponseDelete apiRegistryResponseDelete = new ApiRegistryResponseDelete();
 
         if(null != applicationApi){
 
             log.info("Registered application :"+apiRegistryRequest.getApplicationName());
             BeanUtils.copyProperties(apiRegistryRequest,applicationApi);
             applicationApi.setIsActive(Boolean.FALSE);
-            applicationApiRepository.save(applicationApi);
+            ApplicationApi applicationApiDeleted = applicationApiRepository.save(applicationApi);
             log.info("Registered application deleted :"+apiRegistryRequest.getApplicationName());
+            ApiRegistryResponse apiRegistryResponse = convertToresponse(applicationApiDeleted);
+            apiRegistryResponse.setMessage("Application has been deleted successfully");
+
+            BeanUtils.copyProperties(apiRegistryResponse,apiRegistryResponseDelete);
+            apiRegistryResponseDelete.setIsActive(applicationApiDeleted.getIsActive());
+            return Optional.of(apiRegistryResponseDelete);
 
         }
+        return Optional.empty();
     }
 
     private ApiRegistryResponse convertToresponse(ApplicationApi applicationApi){
